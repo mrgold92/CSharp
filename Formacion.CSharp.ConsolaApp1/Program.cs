@@ -12,10 +12,116 @@ namespace Formacion.CSharp.ConsolaApp1
         static void Main(string[] args)
         {
 
+            Reserva reserva = new Reserva();
+
+            Console.Write("ID de la reserva: ");
+            reserva.id = Console.ReadLine();
+
+            Console.Write("Nombre del cliente: ");
+            reserva.cliente = Console.ReadLine();
+
+            Console.Write("Tipo de reserva: ");
+            //reserva.tipo = Convert.ToInt32(Console.ReadLine());
+
+            string respuesta = Console.ReadLine();
+            //int.TryParse(respuesta, out int respuestaNumero);
+            //var respuestNum = int.TryParse(respuesta, out _);
+            int.TryParse(respuesta, out reserva.tipo);
+
+
+            Console.Write("¿Es fumador?: ");
+            //reserva.fumador = Convert.ToBoolean(Console.ReadLine());
+            string respuesta2 = Console.ReadLine();
+
+            // Con if
+
+            //if (respuesta2.ToLower().Trim() == "si" || respuesta2.ToLower().Trim() == "s" || respuesta2.ToLower().Trim() == "sí")
+            //{
+            //    reserva.fumador = true;
+            //}
+            //else
+            //{
+            //    reserva.fumador = false;
+            //}
+
+            // Con operadores ternarios
+
+            //reserva.fumador = respuesta2.ToLower().Trim() == "si"
+            //                || respuesta2.ToLower().Trim() == "s"
+            //                || respuesta2.ToLower().Trim() == "sí"
+            //                ? true
+            //                : false;
+
+            // Con switch
+            switch (respuesta2.ToLower().Trim())
+            {
+                case "si":
+                case "s":
+                case "sí":
+                    reserva.fumador = true;
+                    break;
+                default:
+                    reserva.fumador = false;
+                    break;
+            }
+
+
+            //Console.Clear();
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write("ID Reserva:".PadRight(15, ' '));
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine(reserva.id);
+
+
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write("Cliente:".PadRight(15, ' '));
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine(reserva.cliente);
+
+            string tipo = "Ha reservado una ";
+
+            switch (reserva.tipo)
+            {
+                case 100:
+                    tipo += "habitación individual";
+                    break;
+                case 200:
+                    tipo += "habitación doble";
+                    break;
+                case 300:
+                    tipo += "junior suite";
+                    break;
+                case 400:
+                    tipo += "suit";
+                    break;
+                default:
+                    tipo = $"Habitación {reserva.tipo} desconocida";
+                    break;
+            }
+
+
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write("Tipo:".PadRight(15, ' '));
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine(tipo);
+
+
+            string fuma = reserva.fumador == true ? "Es fumador" : "No es fumador";
+
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write("¿Fuma?:".PadRight(15, ' '));
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine(fuma);
+
+
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.ReadKey();
+
+
             byte a = 10; // 8 bits
             int b = 1012; // 16 bits
             string c = "42";
-            
+
 
 
             Alumno alumno1 = new Alumno();
@@ -62,6 +168,8 @@ namespace Formacion.CSharp.ConsolaApp1
             // Transformamos string en byte. a->42
             // Si no se puede convertir (porque haya texto), el valor será 0.
             byte.TryParse(c, out a);
+            //byte.TryParse(c, out byte respuestaNumero);
+            //var respuestNum = byte.TryParse(c, out _);
             Console.WriteLine(a);
 
             // En este caso, si no es posible la conversión,
@@ -116,5 +224,18 @@ namespace Formacion.CSharp.Objects
         public string apellidos = "García";
         public int edad = 28;
 
+    }
+
+    public class Reserva
+    {
+        public string id;
+        public string cliente;
+
+        //100:habitación individual
+        //200:habitación doble
+        //300:junior suite
+        //400:suit
+        public int tipo;
+        public bool fumador;
     }
 }
