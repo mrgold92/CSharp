@@ -5,7 +5,7 @@
 * D3. Muestra el DNI con la letra. El resto de la división
 * representa la posición de la letra del DNI en lista.
 *------------------------------------------------------------------*/
-namespace D
+namespace Ejercicios
 {
     class D
     {
