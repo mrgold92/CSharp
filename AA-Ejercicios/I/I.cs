@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 /**********************************************************************
 * I1. Pregunta al operador 5 colores
