@@ -7,20 +7,20 @@ namespace Formacion.CSharp.ConsolaApp3
     {
         static void Main(string[] args)
         {
-            Alumno alumno = new Alumno() { nombre = "Pepe", apellidos = "Sánchez", edad = 29 };
+            Alumno alumno = new Alumno() { Nombre = "Pepe", Apellidos = "Sánchez", Edad = 29 };
             //Retornamos un console.writeline
-            alumno.pintaNombre(100, "Sr.");
-            alumno.pintaNombre(0, "Sr.");
-            alumno.pintaNombre(100, "");
-            alumno.pintaNombre(0, "");
+            alumno.PintarNombre(100, "Sr.");
+            alumno.PintarNombre(0, "Sr.");
+            alumno.PintarNombre(100, "");
+            alumno.PintarNombre(0, "");
 
-            alumno.pintaNombre(prefijo: "Sr.", modo: 100);
-            alumno.pintaNombre(0);
-            alumno.pintaNombre(100, param2: "DEMO");
+            alumno.PintarNombre(prefijo: "Sr.", modo: 100);
+            alumno.PintarNombre(0);
+            alumno.PintarNombre(100, param2: "DEMO");
 
 
             //Retornamos un string
-            Console.WriteLine(alumno.nombreCompleto());
+            Console.WriteLine(alumno.NombreCompleto());
 
 
             Calculos calculos = new Calculos();
@@ -42,56 +42,41 @@ namespace Formacion.CSharp.Objects
 {
     public class Alumno
     {
-        public string nombre = "Pepe";
-        public string apellidos = "García";
-        public int edad = 28;
+        public string Nombre = "Pepe";
+        public string Apellidos = "García";
+        public int Edad = 28;
 
         /// <summary>
         /// Pinta el nombre y los apellidos del Alumno
         /// </summary>
         /// <param name="modo"></param>
         /// <param name="prefijo"></param>
-        public void pintaNombre(int modo, string prefijo = "Don", string param1 = "", string param2 = "")
+        public void PintarNombre(int modo, string prefijo = "Don", string param1 = "", string param2 = "")
         {
             if (prefijo.Length > 0)
             {
                 if (modo == 100)
                 {
-                    Console.WriteLine($"{prefijo} {this.apellidos}, {this.nombre} ");
+                    Console.WriteLine($"{prefijo} {this.Apellidos}, {this.Nombre} ");
                 }
                 else
                 {
-                    Console.WriteLine($"{prefijo} {this.nombre} {this.apellidos}");
+                    Console.WriteLine($"{prefijo} {this.Nombre} {this.Apellidos}");
                 }
 
 
             }
             else
             {
-                Console.WriteLine($"{this.nombre}, {this.apellidos} ");
-
-
+                Console.WriteLine($"{this.Nombre}, {this.Apellidos} ");
             }
 
         }
 
-        public string nombreCompleto()
+        public string NombreCompleto()
         {
-            return $"{this.nombre} {this.apellidos}";
+            return $"{this.Nombre} {this.Apellidos}";
         }
-    }
-
-    public class Reserva
-    {
-        public string id;
-        public string cliente;
-
-        //100:habitación individual
-        //200:habitación doble
-        //300:junior suite
-        //400:suit
-        public int tipo;
-        public bool fumador;
     }
 
     public class Calculos
