@@ -43,7 +43,7 @@ namespace Ejercicios
 
             Console.WriteLine("--------------------");
 
-            // Del 20 al 10 multimplicado del 5 a 8, utilizando un while
+            // Del 20 al 10 multiplicado del 5 a 8, utilizando un while
             int c1 = 20, c2 = 5;
             while (c1 >= 10)
             {
