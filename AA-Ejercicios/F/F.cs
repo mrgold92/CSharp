@@ -75,7 +75,7 @@ namespace Ejercicios
 
             Console.WriteLine("------------------------");
 
-            // Del 20 al 10 multimplicado del 5 a 8, utilizando dos FOR
+            // Del 20 al 10 multiplicado del 5 a 8, utilizando dos FOR
             for (int i = 20; i >= 10; i--)
             {
                 for (int j = 5; j <= 8; j++)
