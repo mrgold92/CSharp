@@ -11,7 +11,7 @@ namespace WebApplication1.Controllers
         public IActionResult Index(int id)
         {
 
-            // Pasar datos a la vida con ViewBag
+            // Pasar datos a la vista con ViewBag
             ViewBag.numero = id;
             ViewBag.mensaje = $"Tabla de multiplicar del {id}";
 
