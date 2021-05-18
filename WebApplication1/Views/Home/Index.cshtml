@@ -1,0 +1,33 @@
+﻿@*Esto es un comentario*@
+
+@{
+    ViewData["Title"] = "Mi primera página";
+}
+
+@model int
+
+@{
+    //Con ViewBag
+    int numero = ViewBag.numero;
+    //Con modelo de datos
+    //@model int
+}
+
+
+<h1>@ViewBag.mensaje</h1>
+<hr />
+<ul>
+    @for (int i = 1; i <= 10; i++)
+    {
+        <li>@i x @numero = @(i*numero)</li>
+    }
+</ul>
+<hr />
+<ul>
+    @for (int i = 1; i <= 10; i++)
+    {
+        <li>@i x @Model = @(i*Model)</li>
+    }
+</ul>
+<hr />
+<a href="/home/demo">Ir a demo</a>
