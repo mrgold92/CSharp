@@ -23,12 +23,11 @@ namespace LINQ
             //A1
             var data = from ca in DataLists.ListaPedidos
                        join linea in DataLists.ListaLineasPedido on ca.Id equals linea.IdPedido into listapedidos
+                      
                        select new
                        {
                            ca.Id,
                            ords = listapedidos,
-
-
                        };
 
 
