@@ -21,10 +21,10 @@ namespace LINQ
         static void Main(string[] args)
         {
 
-            A1();
+            //A1();
             B1();
-            C1(); //<--TODO
-            D1();
+            //C1(); //<--TODO
+            //D1();
 
 
 
@@ -58,25 +58,58 @@ namespace LINQ
         /// </summary>
         static void B1()
         {
-            var b = DataLists.ListaLineasPedido.Where(x => x.Cantidad > 10)
-                .Select(r => new
-                {
-                    Clientes = DataLists.ListaClientes
-                                .Where(x => x.Id == DataLists.ListaPedidos
-                                                    .Where(x => x.Id == r.IdPedido)
-                                                    .Select(y => y.IdCliente)
-                                                    .FirstOrDefault())
-                                .Select(q => new { id = q.Id, Nombre = q.Nombre })
 
-                                .FirstOrDefault()
+            var data = DataLists.ListaLineasPedido
+               .GroupBy(x => x.IdPedido)
+               .Where(r => r.Sum(x => x.Cantidad) > 10)
+               .Select(r => new
+               {
+                  
+                   Clientes = DataLists.ListaClientes
+                                       .Where(x => x.Id == DataLists.ListaPedidos
+                                                           .Where(x => x.Id == r.Key)
+                                                           .Select(y => y.IdCliente)
+                                                           .FirstOrDefault())
+                                       .Select(q => new { id = q.Id, Nombre = q.Nombre })
 
-                }).Distinct().ToList();
+                                       .FirstOrDefault()
 
 
-            foreach (var bb in b)
+               }).Distinct().ToList();
+
+            foreach (var bb in data)
             {
-                Console.WriteLine($"Cliente id: {bb.Clientes.id} Cliente nombre: {bb.Clientes.Nombre}");
+                Console.WriteLine($"Cliente: {bb.Clientes.Nombre}");
             }
+
+
+            //var b = DataLists.ListaLineasPedido
+            //    .Where(x => x.Cantidad > 10)
+            //    .Select(r => new
+            //    {
+            //        Clientes = DataLists.ListaClientes
+            //                    .Where(x => x.Id == DataLists.ListaPedidos
+            //                                        .Where(x => x.Id == r.IdPedido)
+            //                                        .Select(y => y.IdCliente)
+            //                                        .FirstOrDefault())
+            //                    .Select(q => new { id = q.Id, Nombre = q.Nombre })
+
+            //                    .FirstOrDefault()
+
+            //    }).Distinct().ToList();
+
+            ///Console.WriteLine($"Numero de clientes que han comprado más de 10 unidades: {b.Count()}");
+
+
+
+
+            //foreach (var d in data)
+            //{
+            //    Console.WriteLine($"Id pedido: {d.Key}  - Cantidad: { d.cantidad}");
+            //    Console.WriteLine();
+            //}
+
+
 
         }
 
