@@ -20,25 +20,125 @@ namespace LINQ
 
         static void Main(string[] args)
         {
-            //A1
 
+            A1();
+            B1();
+            C1(); //<--TODO
+            D1();
+
+
+
+
+        }
+
+
+
+        /// <summary>
+        ///  Listado de Pedidos con el importe total.
+        /// </summary>
+        static void A1()
+        {
             var dat2 = DataLists.ListaLineasPedido.GroupBy(a => a.IdPedido)
-               .Select(r => new
-               {
-                   r.Key,
-                   lineas = r,
-                   totalPedido = r.Sum(x => x.Cantidad * (DataLists.ListaProductos.Where(s => s.Id == x.IdProducto).Select(h => h.Precio).FirstOrDefault()))
-               }).ToList();
+              .Select(r => new
+              {
+                  r.Key,
+                  lineas = r,
+                  totalPedido = r.Sum(x => x.Cantidad * (DataLists.ListaProductos.Where(s => s.Id == x.IdProducto).Select(h => h.Precio).FirstOrDefault()))
+              }).ToList();
 
 
             foreach (var item in dat2)
             {
                 Console.WriteLine($"Clave (IdPedido): {item.Key} - Total pedido: {item.totalPedido}");
             }
+        }
+
+        /// <summary>
+        /// Clientes que han comprado más de 10 unidades
+        /// </summary>
+        static void B1()
+        {
+            var b = DataLists.ListaLineasPedido.Where(x => x.Cantidad > 10)
+                .Select(r => new
+                {
+                    Clientes = DataLists.ListaClientes
+                                .Where(x => x.Id == DataLists.ListaPedidos
+                                                    .Where(x => x.Id == r.IdPedido)
+                                                    .Select(y => y.IdCliente)
+                                                    .FirstOrDefault())
+                                .Select(q => new { id = q.Id, Nombre = q.Nombre })
+
+                                .FirstOrDefault()
+
+                }).Distinct().ToList();
+
+
+            foreach (var bb in b)
+            {
+                Console.WriteLine($"Cliente id: {bb.Clientes.id} Cliente nombre: {bb.Clientes.Nombre}");
+            }
+
+        }
+
+        /// <summary>
+        /// Productos que han comprado más de un cliente.
+        /// </summary>
+        // TODO
+        static void C1()
+        {
+            //Productos
+
+            //Productos que ha comprado más de un cliente
 
 
 
+            //foreach (var pedido in pedidos)
+            //{
 
+            //    Console.WriteLine($"ID pedido: {pedido.Id} - Cliente: {pedido.IdCliente}");
+
+            //    var idProductos = DataLists.ListaLineasPedido.Where(x => x.IdPedido == pedido.Id).Select(x => x.IdProducto).ToList();
+
+            //    foreach (var id in idProductos)
+            //    {
+
+            //        var productos = DataLists.ListaProductos.Where(x => x.Id == id).ToList();
+
+            //        foreach (var producto in productos)
+            //        {
+            //            Console.WriteLine("--> " + producto.Descripcion);
+
+
+            //        }
+
+            //    }
+
+
+            //}
+            //}
+
+        }
+
+        /// <summary>
+        /// Productos del que se ha vendido menos unidades.
+        /// </summary>
+        static void D1()
+        {
+            var data = DataLists.ListaLineasPedido
+               .GroupBy(x => x.IdProducto)
+                .Select(r => new
+                {
+                    r.Key,
+                    cantidad = r.Sum(s => s.Cantidad)
+                    //cantidad =r.Sum(x => r.Select(h=>h.Cantidad).FirstOrDefault()),
+                }).OrderBy(x => x.cantidad).ToList();
+
+
+            foreach (var d in data)
+            {
+                Console.WriteLine($"Id producto: {d.Key}  - Cantidad: { d.cantidad}");
+                Console.WriteLine();
+            }
         }
 
         public class Cliente
