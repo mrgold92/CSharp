@@ -21,38 +21,23 @@ namespace LINQ
         static void Main(string[] args)
         {
             //A1
-            var data = from ca in DataLists.ListaPedidos
-                       join linea in DataLists.ListaLineasPedido on ca.Id equals linea.IdPedido into listapedidos
-                      
-                       select new
-                       {
-                           ca.Id,
-                           ords = listapedidos,
-                       };
+
+            var dat2 = DataLists.ListaLineasPedido.GroupBy(a => a.IdPedido)
+               .Select(r => new
+               {
+                   r.Key,
+                   lineas = r,
+                   totalPedido = r.Sum(x => x.Cantidad * (DataLists.ListaProductos.Where(s => s.Id == x.IdProducto).Select(h => h.Precio).FirstOrDefault()))
+               }).ToList();
 
 
-            foreach (var item in data)
+            foreach (var item in dat2)
             {
-                float total = 0;
-                Console.Write($"ID: {item.Id} ");
-                foreach (var a in item.ords)
-                {
-                    //precio de cada producto
-                    var idProducto = a.IdProducto;
-
-                    var productos = from d in DataLists.ListaProductos where d.Id == idProducto select d;
-
-                    foreach (var aa in productos)
-                    {
-                        total += a.Cantidad * aa.Precio;
-                    }
-                }
-
-                Console.Write($"total: {total}");
-                Console.WriteLine();
-
-
+                Console.WriteLine($"Clave (IdPedido): {item.Key} - Total pedido: {item.totalPedido}");
             }
+
+
+
 
         }
 

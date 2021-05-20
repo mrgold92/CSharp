@@ -14,9 +14,19 @@ namespace Linq
         {
 
 
+            //LINQ con SQL
+
+
+            
+
+
+        }
+
+        void ordenar()
+        {
             /**************************** 
-             * Ejercicios
-             ****************************/
+            * Ejercicios
+            ****************************/
 
             //Lista completa de clientes
 
@@ -92,26 +102,72 @@ namespace Linq
 
             Console.WriteLine("************************************");
 
+
             //Por métodos
-            var data = DataLists.ListaPedidos.GroupBy(r => r.IdCliente)
+            //Agrupación simple
+
+            //Pedidos agrupados por el IdCliente. Retorna una IGrouping.
+            //La colección IGrouping tiene una Key (por la que se agrupa)
+            //y un listado de registros asociados a la Key.
+            var data1 = DataLists.ListaPedidos
+                        .GroupBy(r => r.IdCliente)    //<-- Especificamos la Key por la cual se agrupan los registros de ListaPedidos
+                        .ToList();
+
+            foreach (var h in data1)
+            {
+                Console.WriteLine($"Clave (IdCliente): {h.Key} - Total pedidos: {h.Count()}");
+                foreach (var i in h)
+                {
+                    Console.WriteLine($" -> {i.Id} - {i.FechaPedido.ToShortDateString()}");
+                }
+            }
+
+            Console.WriteLine("************************************");
+
+            //Agrupación avanzada
+            var data2 = DataLists.ListaPedidos.GroupBy(r => r.IdCliente)
                 .Select(r => new
                 {
-                    Clave = r.Key,
-                    TotalPedidos = r.Count(),
-                    lineas = r,
-                    Cliente = DataLists.ListaClientes.Where(s => s.Id == r.Key).FirstOrDefault()
+                    Clave = r.Key, //<-- Especificamos la Key por la cual se agrupan los registros de ListaPedidos
+                    TotalPedidos = r.Count(), //<-- Contamos todos los registros de ListaPedidos.
+                    pedidos = r, //<--Devolvemos todos los registros de ListaPedidos como 'pedidos'.
+                    //Cliente = DataLists.ListaClientes.Where(s => s.Id == r.Key).FirstOrDefault() //<-- Subconsulta.
+                    NombreCliente = DataLists.ListaClientes.Where(s => s.Id == r.Key).Select(z => z.Nombre).FirstOrDefault() //<-- Subconsulta.
                 }).ToList();
 
-            foreach (var a in data)
+            foreach (var a in data2)
             {
-                Console.WriteLine($"Cliente: {a.Clave} {a.Cliente.Nombre} Total Pedidos: { a.TotalPedidos}");
+                Console.WriteLine($"Cliente: {a.Clave} {a.NombreCliente} Total Pedidos: { a.TotalPedidos}");
 
-                foreach (var l in a.lineas)
+                foreach (var l in a.pedidos)
                 {
                     Console.WriteLine($"--> {l.Id } - {l.FechaPedido.ToShortDateString()}");
                 }
 
             }
+
+
+            Console.WriteLine("************************************");
+
+            //Agrupación ejercicio: Pedidos con el importe total de cada pedido
+
+            var dat2 = DataLists.ListaLineasPedido.GroupBy(a => a.IdPedido)
+               .Select(r => new
+               {
+                   r.Key,
+                   lineas = r,
+                   totalPedido = r.Sum(x => x.Cantidad * (DataLists.ListaProductos.Where(s => s.Id == x.IdProducto).Select(h => h.Precio).FirstOrDefault()))
+
+               }).ToList();
+
+
+            foreach (var item in dat2)
+            {
+                Console.WriteLine($"Clave (IdPedido): {item.Key} - Total pedido: {item.totalPedido}");
+            }
+
+
+
 
             Console.ReadKey();
 
@@ -242,11 +298,10 @@ namespace Linq
             {
                 Console.WriteLine($"{item.Descripcion} {item.Precio}");
             }
-
-
         }
 
     }
+
 
     public class Cliente
     {
