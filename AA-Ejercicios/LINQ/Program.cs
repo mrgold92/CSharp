@@ -25,13 +25,15 @@ namespace LINQ
             //B1();
             //C1(); //<--TODO
             //D1();
-            E1();
+            //E1();
 
 
 
         }
 
-
+        /****************************************
+        *               EJERCICIOS              *
+        ****************************************/
 
         /// <summary>
         ///  Listado de Pedidos con el importe total.
@@ -203,6 +205,14 @@ namespace LINQ
             Console.WriteLine("{0,-8} {1,5}", data.Clientes.id, data.Clientes.Nombre);
 
         }
+
+
+
+        /****************************************
+        *               CLASES                 *
+        ****************************************/
+
+
         public class Cliente
         {
             public int Id { get; set; }
