@@ -22,10 +22,10 @@ namespace LINQ
         {
 
             //A1();
-            B1();
+            //B1();
             //C1(); //<--TODO
             //D1();
-
+            E1();
 
 
 
@@ -64,7 +64,7 @@ namespace LINQ
                .Where(r => r.Sum(x => x.Cantidad) > 10)
                .Select(r => new
                {
-                  
+
                    Clientes = DataLists.ListaClientes
                                        .Where(x => x.Id == DataLists.ListaPedidos
                                                            .Where(x => x.Id == r.Key)
@@ -174,6 +174,35 @@ namespace LINQ
             }
         }
 
+        /// <summary>
+        /// Cliente que se ha gastado más dinero.
+        /// </summary>
+        static void E1()
+        {
+            var data = DataLists.ListaLineasPedido
+               .GroupBy(x => x.IdPedido)
+               .Select(r => new
+               {
+                   r.Key,
+                   maximo = r.Max(x => x.Cantidad),
+                   Clientes = DataLists.ListaClientes
+                                       .Where(x => x.Id == DataLists.ListaPedidos
+                                                           .Where(x => x.Id == r.Key)
+                                                           .Select(y => y.IdCliente)
+                                                           .FirstOrDefault())
+                                       .Select(q => new { id = q.Id, Nombre = q.Nombre })
+
+                                       .FirstOrDefault()
+
+
+               }).OrderByDescending(x => x.maximo).FirstOrDefault();
+
+
+            Console.WriteLine("El cliente que se ha gastado más dinero es:\n");
+            Console.WriteLine("{0,-8} {1,5}", "ID:", "Nombre:");
+            Console.WriteLine("{0,-8} {1,5}", data.Clientes.id, data.Clientes.Nombre);
+
+        }
         public class Cliente
         {
             public int Id { get; set; }
