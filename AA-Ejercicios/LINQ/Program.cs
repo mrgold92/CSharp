@@ -26,6 +26,7 @@ namespace LINQ
             //C1(); //<--TODO
             //D1();
             //E1();
+            F1();
 
 
 
@@ -206,6 +207,20 @@ namespace LINQ
 
         }
 
+        /// <summary>
+        /// Pregunta por el código de un pedido.
+        /// </summary>
+        static void F1()
+        {
+            Console.Write("Dime el código de pedido: ");
+            int.TryParse(Console.ReadLine(), out int idPedido);
+
+            var pedido = DataLists.ListaPedidos.Where(x => x.Id == idPedido).FirstOrDefault();
+
+            Console.WriteLine($"ID pedido: {idPedido}");
+            Console.WriteLine($"Fecha pedido: {pedido.FechaPedido.ToShortDateString()}");
+            Console.WriteLine($"Cliente del pedido: {pedido.IdCliente}");
+        }
 
 
         /****************************************
