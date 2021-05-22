@@ -26,9 +26,10 @@ namespace LINQ
             //C1(); //<--TODO
             //D1();
             //E1();
-            F1();
-
-
+            //F1();
+            //F2();
+            //F3();
+            F4();
 
         }
 
@@ -222,7 +223,96 @@ namespace LINQ
             Console.WriteLine($"Cliente del pedido: {pedido.IdCliente}");
         }
 
+        /// <summary>
+        /// Muestra los datos del cliente
+        /// </summary>
+        static void F2()
+        {
+            Console.Write("Dime el código de pedido: ");
+            int.TryParse(Console.ReadLine(), out int idPedido);
 
+            var pedidos = DataLists.ListaPedidos.Where(x => x.Id == idPedido)
+                .Select(r => new
+                {
+                    r,
+                    Cliente = DataLists.ListaClientes.Where(x => x.Id == r.IdCliente).FirstOrDefault()
+                }).FirstOrDefault();
+
+
+            Console.WriteLine($"Pedido id: {pedidos.r.Id}");
+            Console.WriteLine($"-->Id cliente: {pedidos.Cliente.Id}");
+            Console.WriteLine($"-->Nombre cliente: {pedidos.Cliente.Nombre}");
+
+        }
+
+
+        /// <summary>
+        /// Muestra los datos del pedido.
+        /// </summary>
+        static void F3()
+        {
+            Console.Write("Dime el código de pedido: ");
+            int.TryParse(Console.ReadLine(), out int idPedido);
+
+            var pedido = DataLists.ListaPedidos.Where(x => x.Id == idPedido)
+                .Select(r => new
+                {
+                    r,
+                    Pedido = DataLists.ListaPedidos.Where(x => x.Id == r.Id).FirstOrDefault()
+                }).FirstOrDefault();
+
+
+            Console.WriteLine($"-->Id Pedido: {pedido.Pedido.Id}");
+            Console.WriteLine($"-->Id del cliente: {pedido.Pedido.IdCliente}");
+            Console.WriteLine($"-->Fecha del pedido: {pedido.Pedido.FechaPedido.ToShortDateString()}");
+
+        }
+
+        /// <summary>
+        ///  Muestra el detalle del pedido con los totales.
+        /// </summary>
+        static void F4()
+        {
+            Console.Write("Dime el código de pedido: ");
+            int.TryParse(Console.ReadLine(), out int idPedido);
+
+            var pedidos = DataLists.ListaLineasPedido
+                .Where(x => x.IdPedido == idPedido)
+                .GroupBy(x => x.IdProducto)
+                .Select(r => new
+                {
+
+                    cantidad = r.Select(x => x.Cantidad).FirstOrDefault(),
+                    Productos = DataLists.ListaProductos.Where(x => x.Id == r.Key).Select(h => new { h }).FirstOrDefault(),
+
+                })
+                .ToList();
+
+            Console.WriteLine($"Pedido id: {idPedido}");
+            Console.WriteLine();
+            Console.WriteLine("Productos:");
+
+            float total = 0;
+            Console.WriteLine("{0, -10} {1, -20} {2, 10} {3, 10}", "ID", "Producto", "Cantidad", "Pprecio");
+            foreach (var item in pedidos)
+            {
+
+                Console.Write("{0,-10}", item.Productos.h.Id);
+                Console.Write("{0, -20}", item.Productos.h.Descripcion);
+                Console.Write("{0, 10}", item.cantidad);
+                Console.Write("{0, 10}", item.Productos.h.Precio);
+                total += item.cantidad * item.Productos.h.Precio;
+                Console.WriteLine();
+            }
+            Console.WriteLine();
+            Console.WriteLine($"Total: {total}");
+
+
+
+
+
+
+        }
         /****************************************
         *               CLASES                 *
         ****************************************/
