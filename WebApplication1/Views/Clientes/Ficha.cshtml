@@ -1,0 +1,88 @@
+﻿@model Customers
+
+<div class="card">
+    <div class="card-header">
+        <b>Ficha del cliente @Model.CompanyName</b>
+    </div>
+    <div class="card-body">
+        <form asp-controller="Clientes" asp-action="Grabar" method="POST">
+            <div class="form-group row">
+                <label class="col-2" asp-for="CustomerID"></label>
+                <div class="col-10">
+                    <input class="form-control" asp-for="CustomerID" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-2" asp-for="CompanyName"></label>
+                <div class="col-10">
+                    <input class="form-control" asp-for="CompanyName" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-2" asp-for="ContactName"></label>
+                <div class="col-10">
+                    <input class="form-control" asp-for="ContactName" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-2" asp-for="ContactTitle"></label>
+                <div class="col-10">
+                    <input class="form-control" asp-for="ContactTitle" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-2" asp-for="Address"></label>
+                <div class="col-10">
+                    <input class="form-control" asp-for="Address" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-2" asp-for="PostalCode"></label>
+                <div class="col-10">
+                    <input class="form-control" asp-for="PostalCode" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-2" asp-for="City"></label>
+                <div class="col-10">
+                    <input class="form-control" asp-for="City" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-2" asp-for="Country"></label>
+                <div class="col-10">
+                    <input class="form-control" asp-for="Country" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-2" asp-for="Region"></label>
+                <div class="col-10">
+                    <input class="form-control" asp-for="Region" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-2" asp-for="Phone"></label>
+                <div class="col-10">
+                    <input class="form-control" asp-for="Phone" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-2" asp-for="Fax"></label>
+                <div class="col-10">
+                    <input class="form-control" asp-for="Fax" />
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-6 text-left">
+                    <a href="/clientes" class="btn btn-danger">Volver al listado</a>
+                </div>
+                <div class="col-6 text-right">
+                    <button class="btn btn-success" type="submit">Grabar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Data;
 using System.Data.SqlClient;
 using NorthwindDATA.Models;
+using Microsoft.EntityFrameworkCore; //<-- para poder hacer include
 
 namespace LinqData
 {
@@ -10,11 +11,16 @@ namespace LinqData
     {
         static void Main(string[] args)
         {
-            TrabajandoConADONET();
+            //TrabajandoConADONET();
 
             Console.WriteLine("-------------------");
 
-            TrabajandoConEF();
+            //TrabajandoConEF();
+
+            Console.WriteLine("-------------------");
+
+            TrabajandoConEFInclude();
+
         }
 
         static void TrabajandoConADONET()
@@ -84,10 +90,39 @@ namespace LinqData
         static void TrabajandoConEF()
         {
             //EntityFramework(manejamos las bases de datos como colecciones)
+            var context = new ModelNorthwind();
+            //Insertar datos
+            //Equivalente a: INSERT INTO Customers VALUES(...,...,)
+            var clienteNuevo = new Customers()
+            {
+                CustomerID = "DEMO1",
+                CompanyName = "Empresa Uno, S.L.",
+                ContactName = "David Salazar",
+                ContactTitle = "Gerente",
+                Address = "Calle si nombre, s/n",
+                City = "Madrid",
+                Region = "Madrid",
+                PostalCode = "12345",
+                Country = "Spain",
+                Phone = "+34 123456789",
+                Fax = "+34 123456789"
+
+
+            };
+
+            //Si ya existe, nos daría un error
+            try
+            {
+                context.Customers.Add(clienteNuevo);
+                context.SaveChanges(); //<-- Hay que confirmar el guardado, por eso lo ponemos en un try/catch
+
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException e) { Console.WriteLine(e.Message); }
+
 
             //Consola de datos - SELECT
             //Equivalente a: SELECT * FROM Customers
-            var context = new ModelNorthwind();
+
             var clientes = context.Customers.ToList();
             //var clientes2 = from c in context.Customers select c;
 
@@ -95,7 +130,94 @@ namespace LinqData
             {
                 Console.WriteLine($"ID: {item.CustomerID}");
                 Console.WriteLine($"Empresa: {item.CompanyName}");
+                Console.WriteLine($"Ciudad: {item.City}");
                 Console.WriteLine($"País: {item.Country}");
+                Console.WriteLine();
+            }
+            Console.WriteLine();
+            Console.WriteLine("---------------------");
+
+            //Filtrar
+            var clientes2 = context.Customers
+                .Where(r => r.Country == "Spain")
+                .OrderBy(r => r.City)
+                .ToList();
+
+            //con exp
+            var clientes3 = from c in context.Customers
+                            where c.Country == "Spain"
+                            orderby c.City
+                            select c;
+
+            foreach (var item in clientes2)
+            {
+                Console.WriteLine($"ID: {item.CustomerID}");
+                Console.WriteLine($"Empresa: {item.CompanyName}");
+                Console.WriteLine($"Ciudad: {item.City}");
+                Console.WriteLine($"País: {item.Country}");
+                Console.WriteLine();
+            }
+
+            //Modificar
+            //Equivale a: UPDATE Customers SET ... = ... WHERE ... = ...;
+            var c1 = context.Customers
+                .Where(r => r.CustomerID == "DEMO1")
+                .FirstOrDefault();
+
+
+            c1.CompanyName = "Empresa Uno Dos y Tres, S.L.";
+            c1.PostalCode = "28001";
+
+
+            //Eliminar
+
+            // si es 1 registro
+            context.Customers.Remove(context.Customers.Where(r => r.CustomerID == "DEMO1").FirstOrDefault());
+            context.SaveChanges();
+
+
+            // si nos devuelve una lista (más de 1 registro)
+            // context.Customers.RemoveRange(context.Customers.Where(r => r.Country == "Spain").ToList());
+
+        }
+
+        static void TrabajandoConEFInclude()
+        {
+            var context = new ModelNorthwind();
+
+            //SELECT * FROM Customers WHERE CustomerID = 'ANATR
+            var cliente = context.Customers.Where(r => r.CustomerID == "ANATR").FirstOrDefault();
+
+            //SELECT * FROM Orders WHERE CustomerID = 'ANATR'
+            var pedidos = context.Orders.Where(r => r.CustomerID == "ANATR").ToList();
+
+            //SELECT* FROM Customers c JOIN Orders o ON c.CustomerID = o.CustomerID WHERE c.CustomerID = 'ANATR'
+            //Con métodos
+            var clientePedidos = context.Customers.Include(r => r.Orders).Where(r => r.CustomerID == "ANATR").FirstOrDefault();
+
+            //Con expresiones
+            var clientePedidos2 = (from c in context.Customers
+                                   join o in context.Orders on c.CustomerID equals o.CustomerID
+                                   where c.CustomerID == "ANATR"
+                                   select c).FirstOrDefault();
+
+
+            Console.WriteLine("Con métodos: \n");
+            Console.WriteLine($"Cliente: {clientePedidos.CompanyName}\n");
+            foreach (var item in clientePedidos.Orders)
+            {
+                Console.WriteLine($"Order ID: {item.OrderID}");
+                Console.WriteLine($"Ship name: {item.ShipName}");
+                Console.WriteLine();
+            }
+
+            Console.WriteLine("Con expresiones: \n");
+            Console.WriteLine($"Cliente: {clientePedidos2.CustomerID}\n");
+            foreach (var item in clientePedidos2.Orders)
+            {
+                Console.WriteLine($"Order ID: {item.OrderID}");
+                Console.WriteLine($"Ship name: {item.ShipName}");
+                Console.WriteLine();
             }
 
 

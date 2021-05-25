@@ -1,0 +1,29 @@
+﻿@model List<Customers>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Identificador</th>
+            <th>Empresa</th>
+            <th>Contacto</th>
+            <th>Dirección</th>
+            <th>Teléfono</th>
+            <th>Fax</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var c in Model)
+        {
+            <tr>
+                <td><a href="/Clientes/Ficha/@c.CustomerID">@c.CustomerID</a></td>
+                <td>@c.CompanyName</td>
+                <td>@c.ContactName <br /><small>(@c.ContactTitle)</small> </td>
+                <td>@c.Address <br /><small>@c.PostalCode @c.City  <br /> (@c.Country)</small></td>
+                <td>@c.Phone</td>
+                <td>@c.Fax</td>
+                <td></td>
+            </tr>
+        }
+    </tbody>
+</table>

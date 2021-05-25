@@ -15,6 +15,7 @@ namespace NorthwindDATA.Models
             Orders = new HashSet<Orders>();
         }
 
+
         public string CustomerID { get; set; }
         public string CompanyName { get; set; }
         public string ContactName { get; set; }
