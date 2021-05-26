@@ -25,14 +25,12 @@ namespace APINorthwind.api.v1._0
                 var db = new ModelNorthwind();
                 db.Configuration.LazyLoadingEnabled = false;
 
-                var producto = db.Employees
-                    .Where(x => x.EmployeeID == idInt)
+                var producto = db.Products
+                    .Where(x => x.ProductID == idInt)
                     .FirstOrDefault();
 
                 if (producto == null)
                 {
-
-
                     context.Response.ContentType = "application/json";
                     context.Response.Write("Producto no encontrado");
                     context.Response.StatusCode = 200;
