@@ -38,14 +38,14 @@ namespace APINorthwind.api.v1._0
                 }
                 else
                 {
-                    context.Response.ContentType = "application/json";
+                    context.Response.ContentType = "text/plain";
                     context.Response.Write("Empleado no encontrado");
                     context.Response.StatusCode = 200;
                 }
             }
             catch (Exception e)
             {
-                context.Response.ContentType = "application/json";
+                context.Response.ContentType = "text/plain";
                 context.Response.Write(e.Message);
                 context.Response.StatusCode = 500;
             }

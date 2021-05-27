@@ -29,22 +29,22 @@ namespace APINorthwind.api.v1._0
                     .Where(x => x.ProductID == idInt)
                     .FirstOrDefault();
 
-                if (producto == null)
-                {
-                    context.Response.ContentType = "application/json";
-                    context.Response.Write("Producto no encontrado");
-                    context.Response.StatusCode = 200;
-                }
-                else
+                if (producto != null)
                 {
                     context.Response.ContentType = "application/json";
                     context.Response.Write(JsonConvert.SerializeObject(producto));
                     context.Response.StatusCode = 200;
                 }
+                else
+                {
+                    context.Response.ContentType = "text/plain";
+                    context.Response.Write("Producto no encontrado");
+                    context.Response.StatusCode = 200;
+                }
             }
             catch (Exception e)
             {
-                context.Response.ContentType = "application/json";
+                context.Response.ContentType = "text/plain";
                 context.Response.Write(e.Message);
                 context.Response.StatusCode = 500;
             }

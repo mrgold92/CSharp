@@ -43,7 +43,23 @@ namespace APIRESTConsola
 
             Console.WriteLine("-------------------");
 
-            Ejercicio2();
+            //Ejercicio2();
+
+            Console.WriteLine("-------------------");
+
+            //Ejercicio3GET();
+
+            Console.WriteLine("-------------------");
+
+            //Ejercicio3POST();
+
+            Console.WriteLine("-------------------");
+
+            //Ejercicio3PUT();
+
+            Console.WriteLine("-------------------");
+
+            Ejercicio3DELETE();
 
         }
 
@@ -256,47 +272,51 @@ namespace APIRESTConsola
         {
             http.BaseAddress = new Uri("https://localhost:44378/api/v1.0/");
 
-            string url = "https://localhost:44378/api/v1.0/";
-
             //Preguntamos por el id de un empleado de Northwind y retornamos los datos
             Console.Write("ID Empleado: ");
             var id = Console.ReadLine();
-            http.BaseAddress = new Uri(url);
+
             var response = http.GetAsync("empleados.ashx?id=" + id).Result;
 
             if (response.StatusCode == System.Net.HttpStatusCode.OK) // 200
             {
+                var contentType = response.Content.Headers.ContentType.MediaType;
 
                 var contenido = response.Content.ReadAsStringAsync().Result;
 
+                if (contentType == "text/plain")
+                {
+                    Console.WriteLine(contenido);
 
-                //JSON -> OBJECT
-                var c = JsonConvert.DeserializeObject<Employees>(contenido);
-
-
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.Write("{0,-20}", "Nombre:");
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine($"{c.FirstName}");
-
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.Write("{0,-20}", "Apellidos: ");
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine($"{c.LastName}");
-
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.Write("{0,-20}", "Title: ");
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine($"{c.Title}");
-
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.Write("{0,-20}", "Fecha nacimiento: ");
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine($"{((DateTime)c.BirthDate).ToShortDateString()}");
-
-                Console.ForegroundColor = ConsoleColor.White;
+                }
+                else if (contentType == "application/json")
+                {
+                    //JSON -> OBJECT
+                    var c = JsonConvert.DeserializeObject<Employees>(contenido);
 
 
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.Write("{0,-20}", "Nombre:");
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine($"{c.FirstName}");
+
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.Write("{0,-20}", "Apellidos: ");
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine($"{c.LastName}");
+
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.Write("{0,-20}", "Title: ");
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine($"{c.Title}");
+
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.Write("{0,-20}", "Fecha nacimiento: ");
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine($"{((DateTime)c.BirthDate).ToShortDateString()}");
+
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
 
             }
             else
@@ -304,6 +324,214 @@ namespace APIRESTConsola
                 Console.WriteLine("Error: {0}", response.StatusCode.ToString());
 
             }
+        }
+
+        static void Ejercicio3GET()
+        {
+            //all o id del producto
+
+            http.BaseAddress = new Uri("https://localhost:44395/api/");
+
+            //Preguntamos por el id de un producto de Northwind y retornamos los datos
+            Console.Write("ID Producto: ");
+            var id = Console.ReadLine().Trim();
+
+            string url = (id == "" || id.ToLower() == "all") ? "products" : "products/" + id;
+
+
+            var response = http.GetAsync(url).Result;
+
+            if (response.StatusCode == System.Net.HttpStatusCode.OK) // 200
+            {
+                var contentType = response.Content.Headers.ContentType.MediaType;
+
+                var contenido = response.Content.ReadAsStringAsync().Result;
+
+                if (contentType == "text/plain")
+                {
+                    Console.WriteLine(contenido);
+
+                }
+                else if (contentType == "application/json")
+                {
+
+                    if (url == "products")
+                    {
+                        //JSON -> OBJECT
+                        var collection = JsonConvert.DeserializeObject<List<Products>>(contenido);
+
+                        foreach (var c in collection)
+                        {
+                            Console.ForegroundColor = ConsoleColor.White;
+                            Console.Write("{0,-20}", "Nombre:");
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.WriteLine($"{c.ProductName}");
+
+                            Console.ForegroundColor = ConsoleColor.White;
+                            Console.Write("{0,-20}", "Precio: ");
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.WriteLine($"{c.UnitPrice}");
+
+                            Console.ForegroundColor = ConsoleColor.White;
+                            Console.Write("{0,-20}", "Stock: ");
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.WriteLine($"{c.UnitsInStock}");
+
+                            Console.ForegroundColor = ConsoleColor.White;
+                            Console.WriteLine();
+                        }
+                    }
+                    else
+                    {
+                        var c = JsonConvert.DeserializeObject<Products>(contenido);
+
+
+                        Console.ForegroundColor = ConsoleColor.White;
+                        Console.Write("{0,-20}", "Nombre:");
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.WriteLine($"{c.ProductName}");
+
+                        Console.ForegroundColor = ConsoleColor.White;
+                        Console.Write("{0,-20}", "Precio: ");
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.WriteLine($"{c.UnitPrice}");
+
+                        Console.ForegroundColor = ConsoleColor.White;
+                        Console.Write("{0,-20}", "Stock: ");
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.WriteLine($"{c.UnitsInStock}");
+
+                        Console.ForegroundColor = ConsoleColor.White;
+                        Console.WriteLine();
+
+                    }
+
+
+                }
+
+            }
+            else
+            {
+                Console.WriteLine("Error: {0}", response.StatusCode.ToString());
+
+            }
+        }
+
+        static void Ejercicio3POST()
+        {
+            Products producto = new Products()
+            {
+                ProductName = "DEMO2",
+                SupplierID = 1,
+                CategoryID = 1,
+                QuantityPerUnit = "10 kg",
+                UnitPrice = 25,
+                UnitsInStock = 200,
+                UnitsOnOrder = 0,
+                ReorderLevel = 10,
+                Discontinued = false
+            };
+            http.BaseAddress = new Uri("https://localhost:44395/api/");
+
+
+            var productoJSON = JsonConvert.SerializeObject(producto);
+            var content = new StringContent(productoJSON, System.Text.Encoding.UTF8, "application/json");
+
+            var response = http.PostAsync("products", content).Result;
+
+            if (response.StatusCode == System.Net.HttpStatusCode.Created) // 201
+            {
+                var responseContent = response.Content.ReadAsStringAsync().Result;
+                Console.WriteLine($"Respuesta: {responseContent}");
+
+            }
+            else
+            {
+                Console.WriteLine("Error: {0}", response.StatusCode.ToString());
+            }
+
+        }
+
+        static void Ejercicio3PUT()
+        {
+            http.BaseAddress = new Uri("https://localhost:44395/api/");
+
+            Console.Write("ID Producto: ");
+            var id = Console.ReadLine().Trim();
+
+            var response = http.GetAsync("products/" + id).Result;
+
+            if (response.StatusCode == System.Net.HttpStatusCode.OK) // 200
+            {
+
+                var contenido = response.Content.ReadAsStringAsync().Result;
+
+                //JSON -> OBJECT
+                var producto = JsonConvert.DeserializeObject<Products>(contenido);
+
+                //cambiamos el nombre
+                producto.ProductName = "DEMOMODIFICADO";
+
+                var productoJSON = JsonConvert.SerializeObject(producto);
+                var content = new StringContent(productoJSON, System.Text.Encoding.UTF8, "application/json");
+
+                var response2 = http.PutAsync("products/" + id, content).Result;
+
+
+                if (response2.StatusCode == System.Net.HttpStatusCode.NoContent) // 204
+                {
+                    Console.WriteLine($"Producto modificado.");
+                }
+                else
+                {
+                    Console.WriteLine("Error: {0}", response2.StatusCode.ToString());
+                }
+
+            }
+            else
+            {
+                Console.WriteLine("Algo ha fallado.");
+            }
+
+
+
+
+        }
+
+        static void Ejercicio3DELETE()
+        {
+            http.BaseAddress = new Uri("https://localhost:44395/api/");
+
+            Console.Write("ID Producto a eliminar: ");
+            var id = Console.ReadLine().Trim();
+
+            Console.WriteLine("¿Seguro que quieres eliminarlo? [s/n]");
+
+            switch (Console.ReadLine().ToLower())
+            {
+                case "si":
+                case "sí":
+                case "s":
+                case "y":
+                case "yes":
+                    var delete = http.DeleteAsync("products/" + id).Result;
+
+                    if (delete.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+                        var responseContent = delete.Content.ReadAsStringAsync().Result;
+                        Console.WriteLine($"Producto eliminado: {responseContent}");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Error.");
+                    }
+                    break;
+                default:
+                    Console.WriteLine("Cancelado");
+                    break;
+            }
+
+            var response = http.GetAsync("products/" + id).Result;
         }
     }
 }

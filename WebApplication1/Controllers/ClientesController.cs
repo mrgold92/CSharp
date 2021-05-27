@@ -3,6 +3,8 @@ using NorthwindDATA.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 
 namespace WebApplication1.Controllers
@@ -18,8 +20,13 @@ namespace WebApplication1.Controllers
         //Mostrar listado de clientes
         public IActionResult Index()
         {
+            var http = new HttpClient();
+            http.BaseAddress = new Uri("https://localhost:44395/api/");
+
+            //con api
+            var clientes = http.GetFromJsonAsync<List<Customers>>("customers").Result;
             //var context = new ModelNorthwind();
-            var clientes = context.Customers.ToList();
+            //var clientes = context.Customers.ToList();
             ViewBag.Title = "Lisado de clientes";
 
             return View(clientes);
