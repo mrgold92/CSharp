@@ -274,11 +274,27 @@ namespace APIRESTConsola
                 var c = JsonConvert.DeserializeObject<dynamic>(contenido);
 
 
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write("{0,-20}", "Nombre:");
+                Console.ForegroundColor = ConsoleColor.Yellow;
 
-                Console.WriteLine($"Nombre: {c.FirstName}");
-                Console.WriteLine($"Apellidos: {c.LastName}");
-                Console.WriteLine($"Title: {c.Title}");
-                Console.WriteLine($"Fecha nacimiento: {((DateTime)c.BirthDate).ToShortDateString()}");
+                Console.WriteLine($"{c.FirstName}");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write("{0,-20}", "Apellidos: ");
+                Console.ForegroundColor = ConsoleColor.Yellow;
+
+                Console.WriteLine($"{c.LastName}");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write("{0,-20}", "Title: ");
+                Console.ForegroundColor = ConsoleColor.Yellow;
+
+                Console.WriteLine($"{c.Title}");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write("{0,-20}", "Fecha nacimiento: ");
+                Console.ForegroundColor = ConsoleColor.Yellow;
+
+                Console.WriteLine($"{((DateTime)c.BirthDate).ToShortDateString()}");
+                Console.ForegroundColor = ConsoleColor.White;
 
 
 
