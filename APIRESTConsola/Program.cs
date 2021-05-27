@@ -530,8 +530,6 @@ namespace APIRESTConsola
                     Console.WriteLine("Cancelado");
                     break;
             }
-
-            var response = http.GetAsync("products/" + id).Result;
         }
     }
 }
