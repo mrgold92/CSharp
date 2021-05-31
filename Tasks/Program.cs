@@ -55,6 +55,11 @@ namespace Tasks
                 Console.WriteLine("Tarea 5 fin");
             });
 
+            //Parallel.Invoke(
+            //    () => tarea1.Start(), 
+            //    () => tarea2.Start(), 
+            //    () => tarea3.Start());
+
             tarea5.Wait(1000); //Esperamos a que finalice la 5
 
             tarea1.Start();
